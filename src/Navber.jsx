@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContest } from "./Context";
 
 const Navber = () => {
+    const {user, logOut}=useContext(AuthContest);
     return (
         <div className="flex justify-between mx-20 my-5">
             <div className=" flex justify-center items-center">
@@ -10,6 +13,9 @@ const Navber = () => {
             <div className="">
                 <NavLink to='/login'>Login</NavLink>
             </div>
+            {user && <p>{user.email}</p>}
+            <button onClick={()=>{logOut()
+            }}>logOut</button>
         </div>
     );
 };

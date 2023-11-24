@@ -10,13 +10,14 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "./Firebase/firbase.config";
-import axios from "axios";
+import useAxios from "./hook/useAxios";
 
 export const AuthContest = createContext(null);
 
 const Context = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const axiosPublic = useAxios();
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
@@ -44,32 +45,52 @@ const Context = ({ children }) => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       console.log("User in Auth Change");
-      if (currentUser) {
-        console.log("User is present");
-        axios
-          .post("https://CrowdChoice-server.vercel.app/jwt", currentUser, {
-            withCredentials: true,
-          })
-          .then((res) => console.log(res.data))
-          .catch((err) => {
-            console.error(err);
-            logOut();
-          });
-      } else {
-        console.log("User is not present");
-        axios
-          .post("https://CrowdChoice-server.vercel.app/logout", user, {
-            withCredentials: true,
-          })
-          .then((res) => console.log(res.data))
-          .catch((error) => console.log(error));
-      }
-      setLoading(false);
+      // if (currentUser) {
+      //   console.log("User is present",currentUser.email);
+      //   axiosPublic.post("/user",{name:currentUser.displayName, email: currentUser.email ,role:'user'})
+      //     .then((res) => console.log(res.data))
+      //     .catch((err) => {
+      //       console.error(err);
+      //       logOut();
+      //     });
+      // } else {
+      //   // console.log("User is not present");
+      //   // axios
+      //   //   .post("https://CrowdChoice-server.vercel.app/logout", user, {
+      //   //     withCredentials: true,
+      //   //   })
+      //   //   .then((res) => console.log(res.data))
+      //   //   .catch((error) => console.log(error));
+      // }
+        if (currentUser)
+        {
+          axiosPublic.post('/jwt', {email:currentUser.email})
+          .then(res => {
+              console.log(res)
+              if (res.data.token) {
+                  console.log("token is ",res.data.token)
+                  localStorage.setItem('access-token', res.data.token);
+              }
+            })
+            .then(error=>{console.log(error)})
+            axiosPublic.post("/user",{name:currentUser.displayName, email: currentUser.email})
+            .then((res) => console.log(res.data))
+            .catch((err) => {
+              console.error(err);
+              logOut();
+            });
+        }
+        else {
+          console.log("hello")
+            localStorage.removeItem('access-token');
+            setLoading(false);
+        }
+        setLoading(false);
     });
     return () => {
       unSubscribe();
     };
-  }, [user]);
+  }, [user,axiosPublic]);
   const authInfo = {
     user,
     createUser,
