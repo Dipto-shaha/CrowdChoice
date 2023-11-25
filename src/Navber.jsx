@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthContest } from "./Context";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Navber = () => {
     const {user, logOut}=useContext(AuthContest);
     return (
@@ -16,6 +17,8 @@ const Navber = () => {
             {user && <p>{user.email}</p>}
             <button onClick={()=>{logOut()
             }}>logOut</button>
+            <ToastContainer position="bottom-center">
+            </ToastContainer>
         </div>
     );
 };

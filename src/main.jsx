@@ -10,6 +10,10 @@ import Context from "./Context";
 import All from "./All";
 import Login from "./Login";
 import Signin from "./Signin";
+import User from "./Admin/User";
+import DashBoard from "./Admin/DashBoard";
+import CreateSurvey from "./Surveyor/createSurvey";
+import SurveyDetails from "./SurveyDetails";
 
 const queryClient = new QueryClient();
 
@@ -29,9 +33,29 @@ const router = createBrowserRouter([
       {
         path:'signin',
         element:<Signin></Signin>
+      },
+      {
+        path:'/createSurvey',
+        element:<CreateSurvey></CreateSurvey>
+      },
+      {
+        path:'/surveyDetails/:_id',
+        element:<SurveyDetails></SurveyDetails>
+      }
+    ]
+
+  },
+  {
+    path:'/admin',
+    element:<DashBoard></DashBoard>,
+    children:[
+      {
+          path:'/admin/user',
+          element:<User></User>
       }
     ]
   },
+  
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

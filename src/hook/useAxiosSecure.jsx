@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext } from "react";
-import Context from "../Context";
+import  { AuthContest } from "../Context";
 import { useNavigate } from "react-router-dom";
 
 
@@ -9,7 +9,7 @@ const axiosPrivate = axios.create({
 })
 const useAxiosSecure = () => {
     const navigate = useNavigate();
-    const { logOut } = useContext(Context);
+    const { logOut } = useContext(AuthContest);
 
     // request interceptor to add authorization header for every secure call to teh api
     axiosPrivate.interceptors.request.use(function (config) {
