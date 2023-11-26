@@ -103,7 +103,8 @@ const CheckoutForm = () => {
     }
 
     return (
-        <div className="w-[500px                                                                                                                                                                                                                                                                                                                                                                                                                                          ] border-2 p-10">
+        <div className="w-[500px] border-2 p-10">
+            Card<p>4242424242424242</p>
             <form onSubmit={handleSubmit} className="mx-auto my-10">
             <CardElement 
                 options={{

@@ -16,6 +16,7 @@ import CreateSurvey from "./Surveyor/createSurvey";
 import SurveyDetails from "./SurveyDetails";
 import Payment from "./Payment/Payment";
 import PaymentList from "./Admin/paymentList";
+import SurveyPublish from "./Admin/SurveyPublish";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
       {
         path:'/admin/paymentHistory',
         element:<PaymentList></PaymentList>
+      },
+      {
+        path:'/admin/surveyStaus',
+        element:<SurveyPublish></SurveyPublish>
       }
     ]
   },
