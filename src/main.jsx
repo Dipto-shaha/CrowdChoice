@@ -14,6 +14,8 @@ import User from "./Admin/User";
 import DashBoard from "./Admin/DashBoard";
 import CreateSurvey from "./Surveyor/createSurvey";
 import SurveyDetails from "./SurveyDetails";
+import Payment from "./Payment/Payment";
+import PaymentList from "./Admin/paymentList";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +43,10 @@ const router = createBrowserRouter([
       {
         path:'/surveyDetails/:_id',
         element:<SurveyDetails></SurveyDetails>
+      },
+      {
+        path:'/beProUser',
+        element:<Payment></Payment>
       }
     ]
 
@@ -52,6 +58,10 @@ const router = createBrowserRouter([
       {
           path:'/admin/user',
           element:<User></User>
+      },
+      {
+        path:'/admin/paymentHistory',
+        element:<PaymentList></PaymentList>
       }
     ]
   },

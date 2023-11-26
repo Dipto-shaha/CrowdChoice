@@ -1,66 +1,75 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useAxios from "./hook/useAxios";
-import { AuthContest } from "./Context";
 import useGetRole from "./hook/useGetRole";
-const SurveyDetails = () => {
-  const [surveyData, setSurveyData] = useState({});
-  const params = useParams();
-  const axios = useAxios();
-  const userRole= useGetRole();
+import { Button,  Radio } from 'antd';
+
+import useServeyDetails from "./hook/useServeyDetails";
+function isTodayBetween(startDate, endDate) {
   const today = new Date();
-  useEffect(() => {
-    const fetchSurveyDetails = async () => {
-      try {
-        console.log(params._id);
-        const response = await axios(`/serveyById/${params._id}`);
-        setSurveyData(response.data);
-      } catch (error) {
-        console.error("Error fetching survey details:", error);
-      }
-    };
-    fetchSurveyDetails();
-  }, [params, axios]);
+  const checkDateTime = today.getTime();
+  const startDateTime = new Date(startDate).getTime();
+  const endDateTime = new Date(endDate).getTime();
+  console.log(startDate, endDate, today);
+  return checkDateTime >= startDateTime && checkDateTime <= endDateTime;
+}
+const SurveyDetails = () => {
+  const params = useParams();
+  const userRole = useGetRole();
+  const [surveyData, loading, refetch] = useServeyDetails(params);
+  // useEffect(() => {
+  //   const fetchSurveyDetails = async () => {
+  //     try {
+  //       console.log(params._id);
+  //       const response = await axios(`/serveyById/${params._id}`);
+  //       setSurveyData(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching survey details:", error);
+  //     }
+  //   };
+  //   fetchSurveyDetails();
+  // }, [params, axios]);
 
-  //  // Check user's authorization and survey status
-  //   useEffect(() => {
-  //     // Simulated logic, replace with your actual authentication and authorization checks
-  //     const userIsAuthenticated = true; // Replace with actual authentication check
-  //     const userIsProUser = true; // Replace with actual check for pro user status
-  //     const surveyDeadline = new Date(surveyData.date[1].$date); // Replace with actual survey deadline
-
-  //     setUserCanVote(userIsAuthenticated && !isDeadlinePassed);
-  //     setUserCanComment(userIsAuthenticated && userIsProUser && !isDeadlinePassed);
-  //     setIsDeadlinePassed(new Date() > surveyDeadline);
-  //   }, [surveyData]);
-
-  // Handle voting logic
   const handleVote = (voteOption) => {
     console.log(`User voted: ${voteOption}`);
   };
 
-  // Handle commenting logic
   const handleComment = (commentText) => {
-    // Simulated logic, replace with actual API call to submit comment
     console.log(`User commented: ${commentText}`);
   };
 
-  // Render the component
+  if (loading) return <></>;
+  console.log(surveyData);
   return (
     <div>
       <h1>{surveyData.title}</h1>
-      <p>{surveyData.description}</p>
       <p>Survey by: {surveyData.name}</p>
-
+      <p>{surveyData.description}</p>
+      {isTodayBetween(surveyData?.date[0], surveyData?.date[1]) ? (
         <div>
-            <button onClick={() => handleVote('Yes')} disabled={userRole !="" && userRole!="Survyor"}>Vote Yes</button>
-            <button onClick={() => handleVote('No')} disabled={userRole !="" && userRole!="Survyor"}>Vote No</button>
+          <form onSubmit={handleVote}>
+            <Radio.Group name="radiogroup" defaultValue={-1}>
+              <Radio value={1}>YES</Radio>
+              <Radio value={2}>No</Radio>
+            </Radio.Group>
+            <button
+              type="submit"
+              disabled={userRole != "" && userRole != "Survyor"}
+            >
+              Submit
+            </button>
+          </form>
         </div>
+      ) : (
+        <div>Total vote: {surveyData.voteYes + surveyData.voteNo}</div>
+      )}
 
-      { userRole=="ProUser" && (
+      {userRole == "ProUser" && (
         <div>
           <textarea placeholder="Add a comment..." />
-          <button onClick={() => handleComment('Comment text')}>Add Comment</button>
+          <button onClick={() => handleComment("Comment text")}>
+            Add Comment
+          </button>
         </div>
       )}
 
@@ -71,17 +80,34 @@ const SurveyDetails = () => {
         )} */}
 
       <div>
+        <p className="text-2xl font-bold">Comment</p>
         {surveyData?.comment?.map((comment, index) => (
           <div key={index}>
             <p>{comment.user}</p>
             <p>{comment}</p>
           </div>
         ))}
+        <div className="flex">
+            <input type="text" placeholder="Write Your comment" className="input input-bordered w-full max-w-xs" />
+            <button className="btn" disabled={userRole!="prouser"}>POST</button>
+        </div>
       </div>
-      <div className="flex mx-5">
-        <button disabled={userRole}>Like</button>
-        <button disabled={userRole}>Dislike</button>
-        <button disabled={userRole}>Report</button>
+      <p className="text-2xl font-bold">FeadBack</p>
+      <div className="flex mx-5 space-x-5">
+        <button className="btn" disabled={userRole == ""}>
+          Like
+        </button>
+        <button className="btn" disabled={userRole == ""}>
+          Dislike
+        </button>
+        <div
+          className="tooltip tooltip-bottom"
+          data-tip="Report this survey for inappropriate content"
+        >
+          <button className="btn" disabled={userRole == ""}>
+            Report
+          </button>
+        </div>
       </div>
     </div>
   );

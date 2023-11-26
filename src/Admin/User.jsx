@@ -7,12 +7,12 @@ const User = () => {
     // useEffect(()=>{
     //     console.log(typeof refetch);
     // },[])
-    const handleChangeRole =(id, role)=>{
-        console.log(id);
+    const handleChangeRole =(email, role)=>{
+        console.log(email);
         let updateInfo;
         if(role)
-           updateInfo={_id:id,role:'admin'};
-        else updateInfo={_id:id,role:'surveyor'};
+           updateInfo={email,role:'admin'};
+        else updateInfo={email,role:'surveyor'};
         axios.patch('/updateRole',updateInfo)
         .then(res=>{
               console.log(res.data);
@@ -44,8 +44,8 @@ const User = () => {
                   <td>{item.email}</td>
                   <td>{item.role}</td>
                   <td className='flex'>
-                    {  item.role!='admin' && <button className="btn mr-5"onClick={()=>handleChangeRole(item._id,true)}>Make Admin</button>}
-                    {  item.role!='surveyor' && <button className='btn' onClick={()=>handleChangeRole(item._id,false)}>Make Surveyor</button>}
+                    {  item.role!='admin' && <button className="btn mr-5"onClick={()=>handleChangeRole(item.email,true)}>Make Admin</button>}
+                    {  item.role!='surveyor' && <button className='btn' onClick={()=>handleChangeRole(item.eamil,false)}>Make Surveyor</button>}
                   </td>
                 </tr>
               );

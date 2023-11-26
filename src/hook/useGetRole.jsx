@@ -6,17 +6,17 @@ import { AuthContest } from "../Context";
 const useGetRole = () => {
     const axios= useAxios();
     const {user}=useContext(AuthContest);
-    const {data:userList =""} = useQuery({
+    const {data:userRole =""} = useQuery({
         queryKey:['userRole'],
         queryFn: async()=>{
             if(!user)
                 return "";
             const res = await axios.get(`/getUserRole?email=${user?.email}`);
-            console.log("User Role is",res.data);
-            return res.data;
+            console.log("User Role is",res.data.role);
+            return res.data.role;
         }
     })
-    return userList;
+    return userRole;
 
 };
 
