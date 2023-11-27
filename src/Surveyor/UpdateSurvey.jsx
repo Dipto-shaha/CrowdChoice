@@ -25,19 +25,19 @@ const UpdateSurvey = () => {
     const title = form.get("title");
     const Category = form.get("Category");
     const description = form.get("description");
-    const question= form.get("question");
+    const question = form.get("question");
 
-    const surveyPost = {
+    const surveyUpdate = {
       name: user.displayName,
       email,
       title,
       Category,
       description,
-      date:startDate,
-      question
+      date: startDate,
+      question,
     };
-    console.log(surveyPost);
-    axios.post("/createSurvey", surveyPost).then((res) => {
+    console.log(surveyUpdate);
+    axios.patch("/serveyUpdate", {_id:surveyData._id,surveyUpdate}).then((res) => {
       console.log(res.data);
       toast.success("Survey Post Created Successfully");
     });
@@ -111,8 +111,12 @@ const UpdateSurvey = () => {
                 {surveyData.Category != "Health" && (
                   <option value="Health">Health</option>
                 )}
-                {surveyData.Category != "Education" && <option value="Education">Education</option>}
-                {surveyData.Category != "Teach" &&  <option value="Teach">Teach</option>}
+                {surveyData.Category != "Education" && (
+                  <option value="Education">Education</option>
+                )}
+                {surveyData.Category != "Teach" && (
+                  <option value="Teach">Teach</option>
+                )}
               </select>
             </div>
           </div>

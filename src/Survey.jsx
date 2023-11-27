@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 const Survey = ({ survey }) => {
   return (
     <div className="p-4 bg-[#f0f7ff] rounded-lg">
-      <p>{survey.title} </p>
+      <p className="text-center font-semibold text-2xl my-5">{survey.title} </p>
+      <p className="font-bold bg-[#a6bff9] rounded-lg py-1 px-2 inline" >{survey.Category}</p>
       <p>{survey.description}</p>
       <div className="mt-5 flex justify-between">
         <p className=" font-bold ">Total vote: {survey.voteYes + survey.voteNo}</p>

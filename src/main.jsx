@@ -18,6 +18,8 @@ import Payment from "./Payment/Payment";
 import PaymentList from "./Admin/paymentList";
 import SurveyPublish from "./Admin/SurveyPublish";
 import UpdateSurvey from "./Surveyor/UpdateSurvey";
+import AllSurvey from "./AllSurvey";
+import PrivateRoute from "./PrivateRoute";
 
 const queryClient = new QueryClient();
 
@@ -25,57 +27,72 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <All></All>,
-    children:[
+    children: [
       {
-        path:'/',
-        element:<Home></Home>
+        path: "/",
+        element: <Home></Home>,
       },
       {
-        path:'login',
-        element:<Login></Login>
+        path: "/login",
+        element: <Login></Login>,
       },
       {
-        path:'signin',
-        element:<Signin></Signin>
+        path: "/signin",
+        element: <Signin></Signin>,
       },
       {
-        path:'/createSurvey',
-        element:<CreateSurvey></CreateSurvey>
+        path: "/survey",
+        element: <AllSurvey></AllSurvey>,
       },
       {
-        path:'/updateSurvey/:_id',
-        element:<UpdateSurvey></UpdateSurvey>
+        path: "/surveyDetails/:_id",
+        element: <SurveyDetails></SurveyDetails>,
       },
       {
-        path:'/surveyDetails/:_id',
-        element:<SurveyDetails></SurveyDetails>
+        path: "/beProUser",
+        element: (
+          <PrivateRoute>
+            <Payment></Payment>
+          </PrivateRoute>
+        ),
       },
       {
-        path:'/beProUser',
-        element:<Payment></Payment>
+        path: "/admin",
+        element: <DashBoard></DashBoard> ,
+        children: [
+          {
+            path: "/admin/user",
+            element: <User></User>,
+          },
+          {
+            path: "/admin/paymentHistory",
+            element: <PaymentList></PaymentList>,
+          },
+          {
+            path: "/admin/surveyStaus",
+            element: <SurveyPublish></SurveyPublish>,
+          },
+        ],
+      },
+      {
+        path: "/survyor",
+        element: <DashBoard></DashBoard>,
+        children: [ {
+          path: "/survyor/createSurvey",
+          element: (
+            <PrivateRoute>
+              <CreateSurvey></CreateSurvey>
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/survyor/updateSurvey/:_id",
+          element: <UpdateSurvey></UpdateSurvey>,
+        }
+        ]
       }
-    ]
-
+    ],
   },
-  {
-    path:'/admin',
-    element:<DashBoard></DashBoard>,
-    children:[
-      {
-          path:'/admin/user',
-          element:<User></User>
-      },
-      {
-        path:'/admin/paymentHistory',
-        element:<PaymentList></PaymentList>
-      },
-      {
-        path:'/admin/surveyStaus',
-        element:<SurveyPublish></SurveyPublish>
-      }
-    ]
-  },
-  
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

@@ -2,20 +2,52 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useAxios from "./hook/useAxios";
 import useGetRole from "./hook/useGetRole";
-import { Button,  Radio } from 'antd';
+import { Radio } from "antd";
+import { Bar, Pie } from 'react-chartjs-2';
+
 
 import useServeyDetails from "./hook/useServeyDetails";
-function isTodayBetween(endDate) {
+function isValid(endDate) {
   const today = new Date();
   const checkDateTime = today.getTime();
   const endDateTime = new Date(endDate).getTime();
-  console.log( endDate, today);
-  return checkDateTime >= endDateTime;
+  console.log(endDate ," Daadline is");
+  return checkDateTime <= endDateTime;
 }
 const SurveyDetails = () => {
   const params = useParams();
   const userRole = useGetRole();
-  const [surveyData, loading, refetch] = useServeyDetails(params);
+  const [surveyData, loading] = useServeyDetails(params);
+  const chartinfo = {
+    labels: ['YES', 'NO'],
+    datasets: [
+      {
+        label: 'Vote',
+        backgroundColor: 'rgba(75,192,192,0.4)',
+        borderColor: 'rgba(75,192,192,1)',
+        borderWidth: 1,
+        hoverBackgroundColor: 'rgba(75,192,192,0.6)',
+        hoverBorderColor: 'rgba(75,192,192,1)',
+        data: [surveyData.voteYes,surveyData.voteNo]
+      },
+    ],
+  }
+  const PIdata = {
+    labels: ['Red',  'Green', 'Purple', 'Orange'],
+    datasets: [
+      {
+        data: [surveyData.voteNo,surveyData.voteYes,],
+        backgroundColor: [
+          '#FF6384',
+          '#2E7D32'
+        ],
+        hoverBackgroundColor: [
+          '#FF6384',
+          '#2E7D32'
+        ],
+      },
+    ],
+  };
   // useEffect(() => {
   //   const fetchSurveyDetails = async () => {
   //     try {
@@ -40,11 +72,14 @@ const SurveyDetails = () => {
   if (loading) return <></>;
   console.log(surveyData);
   return (
-    <div>
-      <h1>{surveyData.title}</h1>
-      <p>Survey by: {surveyData.name}</p>
+    <div className="bg-[#f0f7ff] lg:mx-20 mx-10 mt-5 lg:mt-10 rounded-2xl lg:p-10 space-y-2">
+      <h1 className="text-3xl text-center   font-bold">{surveyData.title}</h1>
+      <p className="font-bold bg-[#a6bff9] rounded-lg py-1 px-2 inline" >{surveyData.Category}</p>
+      <p className="text-xl font-medium">Surveyor Name: {surveyData.name}</p>
       <p>{surveyData.description}</p>
-      {isTodayBetween(surveyData.date) ? (
+      <p className="font-bold">Questons</p>
+      <p>{surveyData.question}</p>
+      {isValid(surveyData.date) ? (
         <div>
           <form onSubmit={handleVote}>
             <Radio.Group name="radiogroup" defaultValue={-1}>
@@ -59,8 +94,11 @@ const SurveyDetails = () => {
             </button>
           </form>
         </div>
-      ) : (
+      ) : (<>
         <div>Total vote: {surveyData.voteYes + surveyData.voteNo}</div>
+        <Bar data={chartinfo} />
+        <Pie data={PIdata} />
+        </>
       )}
 
       {userRole == "ProUser" && (
@@ -87,8 +125,14 @@ const SurveyDetails = () => {
           </div>
         ))}
         <div className="flex">
-            <input type="text" placeholder="Write Your comment" className="input input-bordered w-full max-w-xs" />
-            <button className="btn" disabled={userRole!="prouser"}>POST</button>
+          <input
+            type="text"
+            placeholder="Write Your comment"
+            className="input input-bordered w-full max-w-xs"
+          />
+          <button className="btn" disabled={userRole != "prouser"}>
+            POST
+          </button>
         </div>
       </div>
       <p className="text-2xl font-bold">FeadBack</p>
