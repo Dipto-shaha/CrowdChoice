@@ -5,13 +5,12 @@ import useGetRole from "./hook/useGetRole";
 import { Button,  Radio } from 'antd';
 
 import useServeyDetails from "./hook/useServeyDetails";
-function isTodayBetween(startDate, endDate) {
+function isTodayBetween(endDate) {
   const today = new Date();
   const checkDateTime = today.getTime();
-  const startDateTime = new Date(startDate).getTime();
   const endDateTime = new Date(endDate).getTime();
-  console.log(startDate, endDate, today);
-  return checkDateTime >= startDateTime && checkDateTime <= endDateTime;
+  console.log( endDate, today);
+  return checkDateTime >= endDateTime;
 }
 const SurveyDetails = () => {
   const params = useParams();
@@ -45,7 +44,7 @@ const SurveyDetails = () => {
       <h1>{surveyData.title}</h1>
       <p>Survey by: {surveyData.name}</p>
       <p>{surveyData.description}</p>
-      {isTodayBetween(surveyData?.date[0], surveyData?.date[1]) ? (
+      {isTodayBetween(surveyData.date) ? (
         <div>
           <form onSubmit={handleVote}>
             <Radio.Group name="radiogroup" defaultValue={-1}>

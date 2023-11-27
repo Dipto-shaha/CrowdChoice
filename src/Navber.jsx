@@ -20,7 +20,6 @@ const Navber = () => {
                         { userRole=="user" && <Link to="/beProUser" className="btn btn-outline btn-primary">Be ProUser</Link>}
                         <button onClick={()=>{logOut()}}>logOut</button>
                     </p>
-
                 }
             </div>
             <ToastContainer position="bottom-center">
