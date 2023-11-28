@@ -9,7 +9,7 @@ function isPrevious(endDate) {
   }
 const FeaturedSurvey = () => {
     const [serveyList,loading]=useServeyPost();
-    if(loading) return <></>
+    if(loading) return <></>;
     const mostvoted = serveyList.filter(survey=> isPrevious(survey.date));
     const recent = serveyList.filter(survey=> !isPrevious(survey.date));
     console.log(serveyList,mostvoted,recent)

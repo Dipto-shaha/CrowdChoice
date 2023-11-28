@@ -97,6 +97,7 @@ const Navber = () => {
                   </Link>
                 )}
             </p>
+            <p>{userRole}</p>
           </div>
           {user ? (
             <div className="flex justify-center items-center ">
