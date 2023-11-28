@@ -9,6 +9,7 @@ import { BarChart, Bar, XAxis, YAxis, Legend } from "recharts";
 import useServeyDetails from "./hook/useServeyDetails";
 import { toast } from "react-toastify";
 import { AuthContest } from "./Context";
+import formatDate from "./utlity/timeFormate";
 function isValid(endDate) {
   const today = new Date();
   const checkDateTime = today.getTime();
@@ -122,6 +123,7 @@ const SurveyDetails = () => {
         {surveyData.Category}
       </p>
       <p className="text-xl font-medium">Surveyor Name: {surveyData.name}</p>
+      <p className="mb-3">Deadline: {formatDate(surveyData.date)}</p>
       <p>{surveyData.description}</p>
       <p className="font-bold">Questons</p>
       <p>{surveyData.question}</p>

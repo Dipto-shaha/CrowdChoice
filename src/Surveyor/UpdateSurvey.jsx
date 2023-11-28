@@ -3,11 +3,12 @@ import { useContext, useState } from "react";
 import { AuthContest } from "../Context";
 import { toast } from "react-toastify";
 import useAxios from "../hook/useAxios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useServeyDetails from "../hook/useServeyDetails";
 const UpdateSurvey = () => {
   const axios = useAxios();
   const params = useParams();
+  const navigate= useNavigate();
   const [surveyData, loading] = useServeyDetails(params);
   const { user } = useContext(AuthContest);
   const [startDate, setStartDate] = useState(new Date(surveyData.date));
@@ -26,7 +27,7 @@ const UpdateSurvey = () => {
     const Category = form.get("Category");
     const description = form.get("description");
     const question = form.get("question");
-
+    
     const surveyUpdate = {
       name: user.displayName,
       email,
@@ -40,6 +41,7 @@ const UpdateSurvey = () => {
     axios.patch("/serveyUpdate", {_id:surveyData._id,surveyUpdate}).then((res) => {
       console.log(res.data);
       toast.success("Survey Post Created Successfully");
+      navigate("/survyor/SurveyList");
     });
   };
   if (loading) return <></>;

@@ -24,6 +24,7 @@ import AdminProvider from "./Admin/AdminProvider";
 import ErrorPage from "./ErrorPage";
 import DashboardSurveyor from "./Surveyor/DashboardSurveyor";
 import SurveyorProvider from "./Surveyor/SurveyorProvider";
+import SurveyList from "./Surveyor/SurveyList";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <All></All>,
-    errorElement:<ErrorPage></ErrorPage>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
@@ -63,41 +64,72 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin",
-        element: <AdminProvider><DashBoard></DashBoard> </AdminProvider>,
+        element: (
+          <AdminProvider>
+            <DashBoard></DashBoard>{" "}
+          </AdminProvider>
+        ),
         children: [
           {
             path: "/admin/user",
-            element: <AdminProvider><User></User></AdminProvider>,
+            element: (
+              <AdminProvider>
+                <User></User>
+              </AdminProvider>
+            ),
           },
           {
             path: "/admin/paymentHistory",
-            element: <AdminProvider><PaymentList></PaymentList></AdminProvider>,
+            element: (
+              <AdminProvider>
+                <PaymentList></PaymentList>
+              </AdminProvider>
+            ),
           },
           {
             path: "/admin/surveyStaus",
-            element: <AdminProvider><SurveyPublish></SurveyPublish></AdminProvider>,
+            element: (
+              <AdminProvider>
+                <SurveyPublish></SurveyPublish>
+              </AdminProvider>
+            ),
           },
         ],
       },
       {
         path: "/survyor",
-        element: <SurveyorProvider><DashboardSurveyor></DashboardSurveyor></SurveyorProvider>,
-        children: [ {
-          path: "/survyor/createSurvey",
-          element: (
-            <SurveyorProvider>
-              <CreateSurvey></CreateSurvey>
-            </SurveyorProvider>
-          ),
-        },
-        {
-          path: "/survyor/updateSurvey/:_id",
-          element: <SurveyorProvider><UpdateSurvey></UpdateSurvey></SurveyorProvider>,
-        },{
-          path:"/survyor/unPblishedSurvey"
-        }
-        ]
-      }
+        element: (
+          <SurveyorProvider>
+            <DashboardSurveyor></DashboardSurveyor>
+          </SurveyorProvider>
+        ),
+        children: [
+          {
+            path: "/survyor/createSurvey",
+            element: (
+              <SurveyorProvider>
+                <CreateSurvey></CreateSurvey>
+              </SurveyorProvider>
+            ),
+          },
+          {
+            path: "/survyor/updateSurvey/:_id",
+            element: (
+              <SurveyorProvider>
+                <UpdateSurvey></UpdateSurvey>
+              </SurveyorProvider>
+            ),
+          },
+          {
+            path: "/survyor/SurveyList",
+            element: (
+              <SurveyorProvider>
+                <SurveyList></SurveyList>
+              </SurveyorProvider>
+            ),
+          },
+        ],
+      },
     ],
   },
 ]);
