@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { AuthContest } from "../Context";
 import { toast } from "react-toastify";
 
-const AdminProvider = ({children}) => {
+const SurveyorProvider = ({children}) => {
     const {user,userRole,loading,logOut} =useContext(AuthContest);
     const loacation = useLocation();
     if(loading)
@@ -14,14 +14,16 @@ const AdminProvider = ({children}) => {
             <span className=" text-7xl loading loading-bars loading-lg "></span>
         </div>;
     }
-    if(user && userRole=="admin") 
+    if(user && userRole=="surveyor") 
         return children;
     logOut();
     toast.warning("You don't have permission")
     return <Navigate state ={{from:loacation.state}} to={'/login'}></Navigate>;
 };
 
-AdminProvider.propTypes = {
+SurveyorProvider.propTypes = {
     children: PropTypes.object
 };
-export default AdminProvider;
+export default SurveyorProvider;
+
+

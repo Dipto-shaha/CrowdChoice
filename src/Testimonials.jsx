@@ -41,7 +41,7 @@ const Testimonials = () => {
     <div className="mt-20">
       <p className="text-center font-semibold text-xl">Testimonial</p>
       <p className="text-center font-bold text-3xl my-5">Voices of the Crowd: What Our Users Say</p>
-      <section className="mx-auto w-1/2">
+      <section className="mx-auto lg:w-1/2">
         <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
           {reviews.map((review) => (
             <SwiperSlide key={review.name}>
@@ -53,7 +53,7 @@ const Testimonials = () => {
                   readOnly
                 />
                 <p className="py-8">{review.testimonial}</p>
-                <h3 className="text-2xl text-orange-400">{review.name}</h3>
+                <p className="text-xl lg:text-3xl text-center font-bold text-[#ff715b]">{review.name}</p>
               </div>
             </SwiperSlide>
           ))}

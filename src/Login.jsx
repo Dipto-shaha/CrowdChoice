@@ -22,6 +22,7 @@ const Login = () => {
         toast.success("Login Successfully");
         console.log("Location is get");
         console.log(res.user.email);
+        console.log(location?.state,location?.state?.from)
         navigate(location?.state ? location.state : "/");
       })
       .catch((error) => {

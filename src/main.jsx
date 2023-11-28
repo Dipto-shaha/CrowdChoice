@@ -20,6 +20,10 @@ import SurveyPublish from "./Admin/SurveyPublish";
 import UpdateSurvey from "./Surveyor/UpdateSurvey";
 import AllSurvey from "./AllSurvey";
 import PrivateRoute from "./PrivateRoute";
+import AdminProvider from "./Admin/AdminProvider";
+import ErrorPage from "./ErrorPage";
+import DashboardSurveyor from "./Surveyor/DashboardSurveyor";
+import SurveyorProvider from "./Surveyor/SurveyorProvider";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +31,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <All></All>,
+    errorElement:<ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
@@ -58,36 +63,38 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin",
-        element: <DashBoard></DashBoard> ,
+        element: <AdminProvider><DashBoard></DashBoard> </AdminProvider>,
         children: [
           {
             path: "/admin/user",
-            element: <User></User>,
+            element: <AdminProvider><User></User></AdminProvider>,
           },
           {
             path: "/admin/paymentHistory",
-            element: <PaymentList></PaymentList>,
+            element: <AdminProvider><PaymentList></PaymentList></AdminProvider>,
           },
           {
             path: "/admin/surveyStaus",
-            element: <SurveyPublish></SurveyPublish>,
+            element: <AdminProvider><SurveyPublish></SurveyPublish></AdminProvider>,
           },
         ],
       },
       {
         path: "/survyor",
-        element: <DashBoard></DashBoard>,
+        element: <SurveyorProvider><DashboardSurveyor></DashboardSurveyor></SurveyorProvider>,
         children: [ {
           path: "/survyor/createSurvey",
           element: (
-            <PrivateRoute>
+            <SurveyorProvider>
               <CreateSurvey></CreateSurvey>
-            </PrivateRoute>
+            </SurveyorProvider>
           ),
         },
         {
           path: "/survyor/updateSurvey/:_id",
-          element: <UpdateSurvey></UpdateSurvey>,
+          element: <SurveyorProvider><UpdateSurvey></UpdateSurvey></SurveyorProvider>,
+        },{
+          path:"/survyor/unPblishedSurvey"
         }
         ]
       }

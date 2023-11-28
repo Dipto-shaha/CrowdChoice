@@ -4,8 +4,8 @@ const Survey = ({ survey }) => {
   return (
     <div className="p-4 bg-[#f0f7ff] rounded-lg">
       <p className="text-center font-semibold text-2xl my-5">{survey.title} </p>
-      <p className="font-bold bg-[#a6bff9] rounded-lg py-1 px-2 inline" >{survey.Category}</p>
-      <p>{survey.description}</p>
+      <p className="font-bold bg-[#bcd1f7] rounded-lg py-1 mb-3 px-2 inline" >{survey.Category}</p>
+      <p className="mt-3">{survey.description}</p>
       <div className="mt-5 flex justify-between">
         <p className=" font-bold ">Total vote: {survey.voteYes + survey.voteNo}</p>
         <Link to={`/surveyDetails/${survey._id}`}>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useAxios from "../hook/useAxios";
+import formatDate from "../utlity/timeFormate";
 
 const PaymentList = () => {
   const axios = useAxios();
@@ -41,7 +42,7 @@ const PaymentList = () => {
                     <td>{item.email}</td>
                     <td>{item.price}</td>
                     <td>{item.transactionId}</td>
-                    <td>{item.paymentDate}</td>
+                    <td>{formatDate(item.paymentDate)}</td>
                   </tr>
                 );
               })}

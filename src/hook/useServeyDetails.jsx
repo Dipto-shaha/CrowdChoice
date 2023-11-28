@@ -3,7 +3,7 @@ import useAxios from "./useAxios";
 const useServeyDetails = (params) => {
     const axios= useAxios()
     const {data:surveyData =[],isPending:loading,refetch} = useQuery({
-        queryKey:['serveyList'],
+        queryKey:['serveyListDetails'],
         queryFn: async()=>{
             const res = await axios.get(`/serveyById/${params._id}`);
             return res.data;

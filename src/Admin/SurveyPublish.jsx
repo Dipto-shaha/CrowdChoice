@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import useAxios from "../hook/useAxios";
 import useServeyPost from "../hook/useServeyPost";
+import formatDate from "../utlity/timeFormate";
 
 const SurveyPublish = () => {
   const [serveyList, loading, refetch] = useServeyPost();
@@ -25,11 +26,16 @@ const SurveyPublish = () => {
       toast.error("Something wrong try again");
     }
   };
+  const SurveyUnPublish = async (_id) => {
+    const res = await axios.patch("/publishedSurvey", { _id });
+    toast.success("Survey Published Sucessfully");
+    console.log(res);
+    refetch();
+  };
   return (
     <>
-      
       <div className="overflow-x-auto overflow-y-hidden">
-      <p className="text-3xl font-bold text-center my-5">Servey List</p>
+        <p className="text-3xl font-bold text-center my-5">Servey List</p>
         <table className="table border border-[#7ec6d5] rounded-xl">
           {/* head */}
           <thead>
@@ -37,6 +43,7 @@ const SurveyPublish = () => {
               <th>Id</th>
               <th>Title</th>
               <th>Email</th>
+              <th>Deadline</th>
               <th>TotalVote</th>
               <th>Status</th>
               <th>Action</th>
@@ -50,12 +57,13 @@ const SurveyPublish = () => {
                     <td>{index + 1}</td>
                     <td>{item.title}</td>
                     <td>{item.email}</td>
+                    <td>{formatDate(item.date)}</td>
                     <td>{item.voteYes + item.voteNo}</td>
                     <td>{item.publish_status ? "Published" : "Unpublished"}</td>
                     <td>
-                      {item.publish_status && (
+                      {item.publish_status ? (
                         <button
-                          className="btn"
+                          className="btn bg-[#ff715b]"
                           onClick={() =>
                             document
                               .getElementById(`my_modal_${item._id}`)
@@ -64,6 +72,8 @@ const SurveyPublish = () => {
                         >
                           UnPublish
                         </button>
+                      ) : (
+                        <button className="btn bg-[#7ec6d5]" onClick={()=>{SurveyUnPublish(item._id)}}>Publish</button>
                       )}
                       <dialog
                         id={`my_modal_${item._id}`}

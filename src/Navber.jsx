@@ -3,10 +3,8 @@ import { Link, NavLink } from "react-router-dom";
 import { AuthContest } from "./Context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useGetRole from "./hook/useGetRole";
 const Navber = () => {
-  const { user, logOut } = useContext(AuthContest);
-  const userRole = useGetRole();
+  const { user, logOut, userRole } = useContext(AuthContest);
   console.log(userRole, "User role is");
   const handleLogout = () => {
     logOut()
@@ -47,25 +45,26 @@ const Navber = () => {
                 <NavLink to="/">Home</NavLink>
               </li>
               <li>
-                <NavLink to="/addjob">Add job</NavLink>
+                <NavLink to="/survey">Survey</NavLink>
               </li>
-              {/* <li>
-                <NavLink to='/myjob'> My posted jobs</NavLink>
-              </li>
-              <li>
-                <NavLink to='/mybid'>My Bids</NavLink>
-              </li>
-              <li>
-                <NavLink to='/myreq'>Bid Requests</NavLink>
-              </li> */}
+              {userRole == "admin" && (
+                <li>
+                  <NavLink to="/admin/user"> Dashboard</NavLink>
+                </li>
+              )}
+              {userRole == "surveyor" && (
+                <li>
+                  <NavLink to="/survyor"> Dashboard</NavLink>
+                </li>
+              )}
             </ul>
           </div>
           <div className=" flex justify-center items-center">
             <img
-              className="h-20 w-20"
+              className="lg:h-20 lg:w-20 w-15 h-8  rounded-full"
               src="https://i.ibb.co/mJ2Jz0G/Screenshot-2023-11-24-201308.png"
             ></img>
-            <p className="text-5xl font-bold">
+            <p className="lg:text-4xl text-lg font-bold">
               Crowd<span className="text-[#ff715b]">Choice</span>
             </p>
           </div>
@@ -78,12 +77,16 @@ const Navber = () => {
             <li>
               <NavLink to="/survey">Survey</NavLink>
             </li>
-            {
-                userRole=="admin" && <li><NavLink to='/admin'> Dashboard</NavLink></li>
-            }
-            {
-                userRole=="survyor" && <li><NavLink to='/survyor'> Dashboard</NavLink></li>
-            }
+            {userRole == "admin" && (
+              <li>
+                <NavLink to="/admin/user"> Dashboard</NavLink>
+              </li>
+            )}
+            {userRole == "surveyor" && (
+              <li>
+                <NavLink to="/survyor"> Dashboard</NavLink>
+              </li>
+            )}
           </ul>
         </div>
         <div className="navbar-end">
@@ -91,13 +94,15 @@ const Navber = () => {
             <p>
               {userRole != "prouser" &&
                 userRole != "admin" &&
-                userRole != "survyor" && (
-                  <Link to="/beProUser" className="btn btn-outline border-2 border-[#ff715b] mr-2">
+                userRole != "surveyor" && (
+                  <Link
+                    to="/beProUser"
+                    className="btn btn-outline border-2 border-[#ff715b] mr-2"
+                  >
                     Be ProUser
                   </Link>
                 )}
             </p>
-            <p>{userRole}</p>
           </div>
           {user ? (
             <div className="flex justify-center items-center ">
@@ -107,9 +112,12 @@ const Navber = () => {
                   src={user.photoURL}
                   alt="Image"
                 />
-                <p className="mr-2">
-                  {user.displayName ? user.displayName : "Name"}
-                </p>
+                <div className="flex flex-col">
+                  <p className="mr-2">
+                    {user.displayName ? user.displayName : "Name"}
+                  </p>
+                  <p className="text-sm text-center capitalize ">{userRole}</p>
+                </div>
               </span>
               <Link
                 className="px-2 py-2 rounded-lg text-[#FFF] bg-[#515474] border-2"

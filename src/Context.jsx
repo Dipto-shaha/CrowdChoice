@@ -16,6 +16,7 @@ export const AuthContest = createContext(null);
 
 const Context = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userRole, setUserRole] = useState("");
   const [loading, setLoading] = useState(true);
   const axiosPublic = useAxios();
   const createUser = (email, password) => {
@@ -43,8 +44,8 @@ const Context = ({ children }) => {
   };
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
       console.log("User in Auth Change");
+      setUser(currentUser);
       // if (currentUser) {
       //   console.log("User is present",currentUser.email);
       //   axiosPublic.post("/user",{name:currentUser.displayName, email: currentUser.email ,role:'user'})
@@ -62,35 +63,46 @@ const Context = ({ children }) => {
       //   //   .then((res) => console.log(res.data))
       //   //   .catch((error) => console.log(error));
       // }
-        if (currentUser)
-        {
-          axiosPublic.post('/jwt', {email:currentUser.email})
-          .then(res => {
-              console.log(res)
-              if (res.data.token) {
-                  console.log("token is ",res.data.token)
-                  localStorage.setItem('access-token', res.data.token);
-              }
-            })
-            .then(error=>{console.log(error)})
-            axiosPublic.post("/user",{name:currentUser.displayName, email: currentUser.email})
-            .then((res) => console.log(res.data))
-            .catch((err) => {
-              console.error(err);
-              logOut();
-            });
+      if (currentUser) {
+        axiosPublic
+          .post("/jwt", { email: currentUser.email })
+          .then((res) => {
+            console.log(res);
+            if (res.data.token) {
+              console.log("token is ", res.data.token);
+              localStorage.setItem("access-token", res.data.token);
+            }
+          })
+          .then((error) => {
+            console.log(error);
+          });
+          if(currentUser.displayName){
+        axiosPublic
+          .post("/user", {
+            name: currentUser.displayName,
+            email: currentUser.email,
+          })
+          .then((res) => {
+            console.log("User role in Auth", res.data);
+            setUserRole(res.data.role);
+          })
+          .catch((err) => {
+            console.error(err);
+            logOut();
+          });
         }
-        else {
-          console.log("hello")
-            localStorage.removeItem('access-token');
-            setLoading(false);
-        }
+      } else {
+        setUserRole("");
+        console.log("hello");
+        localStorage.removeItem("access-token");
         setLoading(false);
+      }
+      setLoading(false);
     });
     return () => {
       unSubscribe();
     };
-  }, [user,axiosPublic]);
+  }, [user, axiosPublic]);
   const authInfo = {
     user,
     createUser,
@@ -99,6 +111,8 @@ const Context = ({ children }) => {
     logInWithGoogle,
     loading,
     updateUserProfile,
+    userRole,
+    setUserRole
   };
 
   return (
