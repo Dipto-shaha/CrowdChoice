@@ -1,10 +1,10 @@
 import useUserList from "../hook/useUserList";
 import useAxios from "../hook/useAxios";
-//import { useState } from "react";
+import { useState } from "react";
 
 const User = () => {
   const [userList, loading, refetch] = useUserList();
-  //const [selectedRole, setSelectedRole] = useState("all");
+  const [selectedRole, setSelectedRole] = useState('all');
   const axios = useAxios();
   const handleChangeRole = (email, role) => {
     console.log(email);
@@ -17,12 +17,16 @@ const User = () => {
       refetch();
     });
   };
-  // const filtered = userList.filter((survey) =>
-  //   selectedRole === "all" ? true : survey.role === selectedRole
-  // );
-  // const handleRoleChange = (role) => {
-  //   setSelectedRole(role);
-  // };
+  if(loading) return <></>;
+  //console.log(userList.result)
+  const filteredUserList = userList.result.filter((item) => {
+    if (selectedRole === 'all') {
+      return true; 
+    } else {
+      return item.role === selectedRole;
+    }
+  });
+  //console.log(filteredUserList)
   return (
     <>
       <div className="overflow-x-auto overflow-y-hidden">
@@ -36,17 +40,17 @@ const User = () => {
               <th>Email</th>
               <th>
                 Role
-                {/* <select
-                  className="text-xl font-bold border-2 p-2"
-                  onChange={(e) => handleRoleChange(e.target.value)}
+                <select
+                  className="ml-2 px-4 border-2 border-[#7ec6d5] py-2"
+                  onChange={(e) => setSelectedRole(e.target.value)}
                   value={selectedRole}
                 >
-                  <option value="all">All</option>
+                  <option value="all">All Roles</option>
                   <option value="user">User</option>
-                  <option value="prouser">Prouser</option>
+                  <option value="prouser">Pro User</option>
                   <option value="admin">Admin</option>
                   <option value="surveyor">Surveyor</option>
-                </select> */}
+                </select>
               </th>
               <th>Change Role</th>
             </tr>
@@ -54,7 +58,7 @@ const User = () => {
           {!loading && (
             <tbody>
               {/* row 2 */}
-              {userList.result.map((item, index) => {
+              {filteredUserList.map((item, index) => {
                 return (
                   <tr className="hover" key={item._id}>
                     <td>{index + 1}</td>

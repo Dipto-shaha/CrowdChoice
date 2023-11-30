@@ -9,11 +9,14 @@ const AdminProvider = ({children}) => {
     const loacation = useLocation();
     if(loading)
     {
+        console.log("kdfjkasfklafha")
         return <div className="flex h-screen justify-center items-center">
             <span className="loading loading-bars loading-md"></span>
             <span className=" text-7xl loading loading-bars loading-lg "></span>
         </div>;
     }
+    console.log("%c I'm Here", "background-color: red; color: white");
+    console.log(user,userRole);
     if(user && userRole=="admin") 
         return children;
     logOut();

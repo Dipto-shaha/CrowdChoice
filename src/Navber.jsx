@@ -84,7 +84,7 @@ const Navber = () => {
             )}
             {userRole == "surveyor" && (
               <li>
-                <NavLink to="/survyor"> Dashboard</NavLink>
+                <NavLink to="/survyor/SurveyList"> Dashboard</NavLink>
               </li>
             )}
           </ul>

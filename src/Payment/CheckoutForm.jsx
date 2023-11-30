@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContest } from "../Context";
 import { toast } from "react-toastify";
 import useAxios from "../hook/useAxios";
+import useAxiosSecure from "../hook/useAxiosSecure";
 
 const CheckoutForm = () => {
   const [error, setError] = useState("");
@@ -12,6 +13,7 @@ const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const axiosSecure = useAxios();
+  const axiosPrivate  =useAxiosSecure();
   const { user, setUserRole } = useContext(AuthContest);
   const navigate = useNavigate();
   const totalPrice = 199;
@@ -82,7 +84,7 @@ const CheckoutForm = () => {
           transactionId: paymentIntent.id,
           paymentDate: new Date(), // utc date convert. use moment js to
         };
-        const res = await axiosSecure.post("/payment", payment);
+        const res = await axiosPrivate.post("/payment", payment);
         console.log("payment saved", res.data);
         if (res.data?.paymentResult?.insertedId) {
           toast.success("Thank you for the taka paisa");

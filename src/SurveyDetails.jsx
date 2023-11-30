@@ -20,7 +20,7 @@ function isValid(endDate) {
 const SurveyDetails = () => {
   const params = useParams();
   const [voteDone, setVoteDone] = useState(true);
-  const { user ,userRole} = useContext(AuthContest);
+  const { user, userRole } = useContext(AuthContest);
   const [surveyData, loading, refetch] = useServeyDetails(params);
   const axios = useAxios();
   const data = [
@@ -95,6 +95,7 @@ const SurveyDetails = () => {
   };
 
   const handleComment = (e) => {
+
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const comment = form.get("comment");
@@ -114,6 +115,22 @@ const SurveyDetails = () => {
     e.target.reset();
   };
 
+  const handleFeedback =async(e)=>{
+    e.preventDefault();
+    const feedbackMessage = e.target.message.value;
+    console.log(surveyData._id, feedbackMessage);
+    try {
+      const res = await axios.post('/savefeedback',{SurveyId:surveyData._id,message: feedbackMessage});
+      console.log(res);
+      const myModal = document.getElementById(`my_modal`);
+      myModal.close();
+      toast.success("Feedback Submitted Sucessfully");
+    } catch (error) {
+      console.error("Error Feedback survey:", error);
+      toast.error("Something wrong try again");
+    }
+    surveyData
+  }
   if (loading) return <></>;
   console.log(surveyData);
   return (
@@ -147,7 +164,9 @@ const SurveyDetails = () => {
             </div>
           ) : (
             <>
-              <div className="font-semibold text-3xl mt-5">Total vote: {surveyData.voteYes + surveyData.voteNo}</div>
+              <div className="font-semibold text-3xl mt-5">
+                Total vote: {surveyData.voteYes + surveyData.voteNo}
+              </div>
             </>
           )}
 
@@ -174,7 +193,7 @@ const SurveyDetails = () => {
               ))}
             </div>
 
-            {  (
+            {
               <div className="join">
                 <form onSubmit={handleComment}>
                   <input
@@ -183,26 +202,33 @@ const SurveyDetails = () => {
                     name="comment"
                     required
                   />
-                  <button className="btn join-item rounded-r-full mt-5  bg-[#ff715b]" disabled={userRole != "prouser"}>
+                  <button
+                    className="btn join-item rounded-r-full mt-5  bg-[#ff715b]"
+                    disabled={userRole != "prouser"}
+                  >
                     Add Comment
                   </button>
                 </form>
               </div>
-            )}
+            }
           </div>
           <p className="text-2xl font-bold my-5">FeadBack</p>
           <div className="flex  space-x-5">
             <button
               className="btn bg-[#ff715b]"
               onClick={() => handleLikedislike(true)}
-              disabled={userRole == "" || userRole =="admin" || userRole=="surveyor"}
+              disabled={
+                userRole == "" || userRole == "admin" || userRole == "surveyor"
+              }
             >
               Like
             </button>
             <button
               className="btn bg-[#ff715b]"
               onClick={() => handleLikedislike(false)}
-              disabled={userRole == "" || userRole =="admin" || userRole=="surveyor"}
+              disabled={
+                userRole == "" || userRole == "admin" || userRole == "surveyor"
+              }
             >
               Dislike
             </button>
@@ -210,9 +236,54 @@ const SurveyDetails = () => {
               className="tooltip tooltip-bottom "
               data-tip="Report this survey for inappropriate content"
             >
-              <button className="btn bg-[#ff715b]" disabled={userRole == "" || userRole =="admin" || userRole=="surveyor"}>
+              <button
+                className="btn bg-[#ff715b]"
+                disabled={
+                  userRole == "" ||
+                  userRole == "admin" ||
+                  userRole == "surveyor"
+                }
+                onClick={() => toast("Reoprted Successfully")}
+              >
                 Report
               </button>
+              </div>
+              <div>
+              <button
+                className="btn bg-[#ff715b]"
+                disabled={
+                  userRole == "" ||
+                  userRole == "admin" ||
+                  userRole == "surveyor"
+                }
+                onClick={() => document.getElementById(`my_modal`).showModal()}
+              >
+                Feedback
+              </button>
+              <dialog
+                id="my_modal"
+                className="modal modal-bottom sm:modal-middle"
+              >
+                <div className="modal-box">
+                  <form onSubmit={handleFeedback}>
+                    <div>Feedback Message</div>
+                    <input
+                      type="text"
+                      name="message"
+                      placeholder="Write Feedback message"
+                      className="input input-bordered  w-full max-w-xs mr-2 mt-5"
+                    />
+                    <button type="submit" className="btn">
+                      Submit
+                    </button>
+                  </form>
+                  <div className="modal-action">
+                    <form method="dialog">
+                      <button className="btn">Close</button>
+                    </form>
+                  </div>
+                </div>
+              </dialog>
             </div>
           </div>
         </div>

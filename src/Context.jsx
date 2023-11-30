@@ -73,9 +73,7 @@ const Context = ({ children }) => {
               localStorage.setItem("access-token", res.data.token);
             }
           })
-          .then((error) => {
-            console.log(error);
-          });
+  
           if(currentUser.displayName){
         axiosPublic
           .post("/user", {
@@ -91,13 +89,14 @@ const Context = ({ children }) => {
             logOut();
           });
         }
+        setLoading(false);
       } else {
         setUserRole("");
         console.log("hello");
         localStorage.removeItem("access-token");
         setLoading(false);
       }
-      setLoading(false);
+      
     });
     return () => {
       unSubscribe();

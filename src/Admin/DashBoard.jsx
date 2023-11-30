@@ -10,7 +10,9 @@ const DashBoard = () => {
         <NavLink to="/admin/Servey" className={({ isActive }) =>  isActive ? "text-[#ff715b] font-bold underline  underline-offset-4":""}></NavLink>
       </div>
       <div className="divider lg:divider-horizontal"></div>
+      <div>
       <Outlet></Outlet>
+      </div>
     </div>
   );
 };

@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
-import useAxios from "../hook/useAxios";
 import formatDate from "../utlity/timeFormate";
+import useAxiosSecure from "../hook/useAxiosSecure";
 
 const PaymentList = () => {
-  const axios = useAxios();
+  const axiosPrvate = useAxiosSecure();
   const [paymentHistory, setpaymentHistory] = useState({});
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getInfo = async () => {
-      const res = await axios.get("/paymentHistory");
+      const res = await axiosPrvate.get("/paymentHistory");
       console.log("Payment History", res.data);
       setpaymentHistory(res.data);
       setLoading(false);
     };
     getInfo();
-  }, [axios]);
+  }, [axiosPrvate]);
 
   return (
     <>

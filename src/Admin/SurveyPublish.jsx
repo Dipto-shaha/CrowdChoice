@@ -2,16 +2,19 @@ import { toast } from "react-toastify";
 import useAxios from "../hook/useAxios";
 import useServeyPost from "../hook/useServeyPost";
 import formatDate from "../utlity/timeFormate";
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import useAxiosSecure from "../hook/useAxiosSecure";
 
 const SurveyPublish = () => {
   const [serveyList, loading, refetch] = useServeyPost();
   const axios = useAxios();
+  const axiosPrivate= useAxiosSecure();
   const handleSurvey = async (e, _id, email) => {
     e.preventDefault();
     const feedbackMessage = e.target.message.value;
     console.log(_id, feedbackMessage);
     try {
-      const res = await axios.patch("/serveyUpdateStatus", {
+      const res = await axiosPrivate.patch("/serveyUpdateStatus", {
         _id,
         feedbackMessage,
         email,
@@ -111,7 +114,31 @@ const SurveyPublish = () => {
             </tbody>
           )}
         </table>
-      </div>{" "}
+      </div>
+      <div className="w-full lg:h-80 mt-5">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          width={500}
+          height={300}
+          data={serveyList}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey={(serveyList.id++)} />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="voteYes" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
+          <Bar dataKey="voteNo" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
+        </BarChart>
+      </ResponsiveContainer>
+      </div>
+
     </>
   );
 };
