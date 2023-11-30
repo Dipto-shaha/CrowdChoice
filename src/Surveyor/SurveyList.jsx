@@ -31,11 +31,11 @@ const SurveyList = () => {
   }
   const handleFeedback = async (_id, email) => {
     console.log(_id, email);
-    document.getElementById(`my_modal_5${_id}`).showModal();
+    document.getElementById(`admin${_id}`).showModal();
     const info = { surveyorEmail: email, SurveyId: _id };
     const result = await axios.post("/surveyFeedback", info);
     console.log(result);
-    document.getElementById(`my_modal_5${_id}`).innerText = result.data.message;
+    document.getElementById(`adminFedback${_id}`).innerText = result.data.message;
   };
   const surveyFeedback = async (_id) => {
     console.log(_id);
@@ -46,11 +46,12 @@ const SurveyList = () => {
       document.getElementById(`userfeedback${_id}`).innerText =
         "No Feedback yet";
     else {
-      console.log(result.data.message)
+      console.log(result.data.message);
       // document.getElementById(`userfeedback${_id}`).innerText = Object.values(result.data)
       // .map((item) => item.message)
       // .join(" ");
-      document.getElementById(`userfeedback${_id}`).innerText =result.data.message;
+      document.getElementById(`userfeedback${_id}`).innerText =
+        result.data.message;
     }
     console.log(result);
   };
@@ -95,9 +96,7 @@ const SurveyList = () => {
                           className="modal modal-bottom sm:modal-middle"
                         >
                           <div className="modal-box">
-                            <h3 className="font-bold text-lg">
-                              User Feedback
-                            </h3>
+                            <h3 className="font-bold text-lg">User Feedback</h3>
                             <p
                               id={`userfeedback${item._id}`}
                               className="text-xl mt-5"
@@ -132,7 +131,7 @@ const SurveyList = () => {
                             Feedback
                           </button>
                           <dialog
-                            id={`my_modal_5${item._id}`}
+                            id={`admin${item._id}`}
                             className="modal modal-bottom sm:modal-middle"
                           >
                             <div className="modal-box">
@@ -140,8 +139,8 @@ const SurveyList = () => {
                                 Admin Feedback
                               </h3>
                               <p
-                                id={`feedback${item._id}`}
-                                className="text-xl mt-5"
+                                id={`adminFedback${item._id}`}
+                                className="text-xl mt-5" 
                               ></p>
                               <div className="modal-action">
                                 <form method="dialog">

@@ -197,7 +197,7 @@ const SurveyDetails = () => {
               <div className="join">
                 <form onSubmit={handleComment}>
                   <input
-                    className="input input-bordered join-item"
+                    className="input input-bordered join-item "
                     placeholder="Add a comment..."
                     name="comment"
                     required
@@ -212,8 +212,9 @@ const SurveyDetails = () => {
               </div>
             }
           </div>
+          <div>
           <p className="text-2xl font-bold my-5">FeadBack</p>
-          <div className="flex  space-x-5">
+          <div className="flax lg:flex-row flex-col  space-x-5">
             <button
               className="btn bg-[#ff715b]"
               onClick={() => handleLikedislike(true)}
@@ -232,7 +233,7 @@ const SurveyDetails = () => {
             >
               Dislike
             </button>
-            <div
+                        <div
               className="tooltip tooltip-bottom "
               data-tip="Report this survey for inappropriate content"
             >
@@ -247,8 +248,7 @@ const SurveyDetails = () => {
               >
                 Report
               </button>
-              </div>
-              <div>
+            </div>
               <button
                 className="btn bg-[#ff715b]"
                 disabled={
@@ -290,36 +290,40 @@ const SurveyDetails = () => {
         {!isValid(surveyData.date) && (
           <div className="flex flex-col">
             <p className="text-3xl font-extrabold text-center">Result</p>
-            <PieChart width={400} height={300}>
-              <Pie
-                data={data}
-                cx={200}
-                cy={150}
-                innerRadius={60}
-                outerRadius={80}
-                fill="#8884d8"
-                label
-              >
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-            <BarChart width={400} height={300} data={data}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="value" fill="#8884d8" />
-            </BarChart>
+            <div className=" flex justify-center">
+              <PieChart width={400} height={300}>
+                <Pie
+                  data={data}
+                  cx={200}
+                  cy={150}
+                  innerRadius={60}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  label
+                >
+                  {data.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </div>
+            <div className="flex justify-center">
+              <BarChart width={400} height={400} data={data}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="#8884d8" />
+              </BarChart>
+            </div>
           </div>
         )}
       </div>
-    </div>
+      </div>
   );
 };
 

@@ -16,6 +16,6 @@ Welcome to CrowdChoice! This client-side application provides a platform for cre
 
 ## Live Link
 
-Explore the live CrowdChoice application [here](<insert live link here>).
+Explore the live CrowdChoice application [here](<https://steady-cat-31c52a.netlify.app/>).
 
 Feel free to dive into the world of CrowdChoice and start engaging with surveys and polls today! If you have any questions or feedback, don't hesitate to reach out. Happy surveying!
